@@ -91,7 +91,7 @@ endfunction
 
 function! mycmake#configure()
   if !myproject#is_set()
-    return v:false;
+    return v:false
   endif
 
   " Must be CMake project
