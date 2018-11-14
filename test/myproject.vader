@@ -1,0 +1,65 @@
+Execute (project clear vars):
+  let t:project_build_dir="my_build_dir"
+  let t:project_source_dir="my_source_dir"
+  ProjectClearVars
+
+Then (Vars should be cleared):
+  Assert !exists("t:project_build_dir")
+  Assert !exists("t:project_source_dir")
+
+Execute (project set empty):
+  ProjectClearVars
+
+Then:
+  Assert !myproject#is_set()
+  Assert !myproject#update_compile_commands()
+
+Execute (project set only build):
+  ProjectClearVars
+  let t:project_build_dir="my_build_dir"
+
+Then:
+  Assert !myproject#is_set()
+
+Execute (project set only source):
+  ProjectClearVars
+  let t:project_source_dir="my_source_dir"
+
+Then:
+  Assert !myproject#is_set()
+
+Execute (project set correct):
+  ProjectClearVars
+  let t:project_build_dir="my_build_dir"
+  let t:project_source_dir="my_source_dir"
+
+Then:
+  Assert myproject#is_set()
+
+Execute (update empty compile commands file):
+  ProjectClearVars
+  let t:project_build_dir="test/case/empty_compile_commands_json"
+  let t:project_source_dir="build/update_empty_compile_commands"
+  call mkdir(t:project_source_dir, "p")
+
+Then:
+  Assert !myproject#update_compile_commands()
+
+Execute (update compile commands correct):
+  ProjectClearVars
+  let t:project_build_dir="test/case/compile_commands_json"
+  let t:project_source_dir="build/update_compile_commands"
+  call mkdir(t:project_source_dir, "p")
+
+Then:
+  Assert myproject#update_compile_commands()
+  Assert myutil#filereadable("compile_commands.json", t:project_source_dir)
+
+" Make sure that the directory changes back to root
+" ------------------------------------------------------------------------------
+After (Clean up):
+  exec cd g:main_directory
+
+Before (Setup):
+  ProjectClearVars
+  let g:main_directory = getcwd()

@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/pleroux/Code/my-cmake.vim/build/cmake_project_good",
+  "command": "/usr/bin/c++ -o CMakeFiles/hello.dir/hello.cpp.o -c /home/pleroux/Code/my-cmake.vim/test/case/cmake/hello.cpp",
+  "file": "/home/pleroux/Code/my-cmake.vim/test/case/cmake/hello.cpp"
+}
+]

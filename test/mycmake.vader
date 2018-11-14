@@ -29,7 +29,7 @@ Then (Vars shouldn't exist):
   Assert !exists("t:cmake_user_arguments")
   Assert !exists("t:cmake_use_conan")
   Assert !exists("t:cmake_use_compile_commands")
-  AssertEqual mycmake#cmake#get_arguments(), []
+  AssertEqual mycmake#get_arguments(), []
 
 " get arguments
 " ------------------------------------------------------------------------------
@@ -38,84 +38,84 @@ Execute (cmake arguments cxx compiler):
   let t:cmake_cxx_compiler = "cxx"
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(),["-DCMAKE_CXX_COMPILER=cxx"]
+  AssertEqual mycmake#get_arguments(),["-DCMAKE_CXX_COMPILER=cxx"]
 
 Execute (cmake arguments c compiler):
   CMakeClearVars
   let t:cmake_c_compiler = "cc"
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), ["-DCMAKE_C_COMPILER=cc"]
+  AssertEqual mycmake#get_arguments(), ["-DCMAKE_C_COMPILER=cc"]
 
 Execute (cmake arguments cxx cflags string):
   CMakeClearVars
   let t:cmake_cxx_flags = "cxx_flags"
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), ["-DCMAKE_CXX_FLAGS=\"cxx_flags\""]
+  AssertEqual mycmake#get_arguments(), ["-DCMAKE_CXX_FLAGS=\"cxx_flags\""]
 
 Execute (cmake arguments c cflags string):
   CMakeClearVars
   let t:cmake_c_flags = "c_flags"
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), ["-DCMAKE_C_FLAGS=\"c_flags\""]
+  AssertEqual mycmake#get_arguments(), ["-DCMAKE_C_FLAGS=\"c_flags\""]
 
 Execute (cmake arguments cxx cflags list):
   CMakeClearVars
   let t:cmake_cxx_flags = ["cxx_flags", "other_flags"]
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), ["-DCMAKE_CXX_FLAGS=\"cxx_flags other_flags\""]
+  AssertEqual mycmake#get_arguments(), ["-DCMAKE_CXX_FLAGS=\"cxx_flags other_flags\""]
 
 Execute (cmake arguments c cflags list):
   CMakeClearVars
   let t:cmake_c_flags = ["c_flags", "other_flags"]
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), ["-DCMAKE_C_FLAGS=\"c_flags other_flags\""]
+  AssertEqual mycmake#get_arguments(), ["-DCMAKE_C_FLAGS=\"c_flags other_flags\""]
 
 Execute (cmake arguments generator):
   CMakeClearVars
   let t:cmake_generator = "gen"
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), ["-G", "\"gen\""]
+  AssertEqual mycmake#get_arguments(), ["-G", "\"gen\""]
 
 Execute (cmake arguments build type):
   CMakeClearVars
   let t:cmake_build_type = "bt"
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), ["-DCMAKE_BUILD_TYPE=bt"]
+  AssertEqual mycmake#get_arguments(), ["-DCMAKE_BUILD_TYPE=bt"]
 
 Execute (cmake arguments install prefix):
   CMakeClearVars
   let t:cmake_install_prefix = "ip"
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), ["-DCMAKE_INSTALL_PREFIX=ip"]
+  AssertEqual mycmake#get_arguments(), ["-DCMAKE_INSTALL_PREFIX=ip"]
 
 Execute (cmake arguments export compile commands false):
   CMakeClearVars
   let t:cmake_export_compile_commands = 0
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), []
+  AssertEqual mycmake#get_arguments(), []
 
 Execute (cmake arguments export compile command true):
   CMakeClearVars
   let t:cmake_export_compile_commands = 1
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), ["-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"]
+  AssertEqual mycmake#get_arguments(), ["-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"]
 
 Execute (cmake arguments clang tidy):
   CMakeClearVars
   let t:cmake_clang_tidy="ct"
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), ["-DCMAKE_C_CLANG_TIDY=ct", "-DCMAKE_CXX_CLANG_TIDY=ct"]
+  AssertEqual mycmake#get_arguments(), ["-DCMAKE_C_CLANG_TIDY=ct", "-DCMAKE_CXX_CLANG_TIDY=ct"]
 
 
 Execute (cmake arguments cppcheck):
@@ -123,21 +123,21 @@ Execute (cmake arguments cppcheck):
   let t:cmake_cppcheck="ct"
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), ["-DCMAKE_C_CPPCHECK=ct", "-DCMAKE_CXX_CPPCHECK=ct"]
+  AssertEqual mycmake#get_arguments(), ["-DCMAKE_C_CPPCHECK=ct", "-DCMAKE_CXX_CPPCHECK=ct"]
 
 Execute (cmake arguments user string):
   CMakeClearVars
   let t:cmake_user_arguments = "ua"
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), ["ua"]
+  AssertEqual mycmake#get_arguments(), ["ua"]
 
 Execute (cmake arguments user list):
   CMakeClearVars
   let t:cmake_user_arguments = ["u", "a"]
 
 Then:
-  AssertEqual mycmake#cmake#get_arguments(), ["u", "a"]
+  AssertEqual mycmake#get_arguments(), ["u", "a"]
 
 " cmake configure
 Execute (cmake configure bad):
@@ -147,8 +147,8 @@ Execute (cmake configure bad):
   let t:project_source_dir = "test/case/cmakelists_txt"
 
 Then:
-  Assert !mycmake#cmake#configure()
-  Assert !mycmake#cmake#update_compiler_commands()
+  Assert !mycmake#configure()
+  Assert !mycmake#update_compiler_commands()
 
 Execute (cmake configure good):
   CMakeClearVars
@@ -158,6 +158,16 @@ Execute (cmake configure good):
   let t:cmake_export_compile_commands = v:true
 
 Then:
-  Assert mycmake#cmake#configure()
+  Assert mycmake#configure()
   Assert filereadable("build/cmake_project_good/CMakeCache.txt")
-  Assert mycmake#cmake#update_compiler_commands()
+  Assert mycmake#update_compiler_commands()
+
+" Make sure that the directory changes back to root
+" ------------------------------------------------------------------------------
+After (Clean up):
+  exec cd g:main_directory
+
+Before (Setup):
+  ProjectClearVars
+  ConanClearVars
+  let g:main_directory = getcwd()

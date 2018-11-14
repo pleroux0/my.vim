@@ -1,26 +1,26 @@
-*vim-cmake-improved.txt* A short multi line description of your plugin
+*my.vim.txt* My vim library
 
 ===============================================================================
-CONTENTS                                                   *vim-cmake-improved*
+CONTENTS                                                               *my.vim*
 
-    1. Intro ....................................... |vim-cmake-improved-intro|
-    2. Requirements ......................... |vim-cmake-improved-requirements|
-    3. Usage ....................................... |vim-cmake-improved-usage|
-    4. Licence ................................... |vim-cmake-improved-licence|
+    1. Intro ................................................... |my.vim-intro|
+    2. Requirements ..................................... |my.vim-requirements|
+    3. Usage ................................................... |my.vim-usage|
+    4. Licence ............................................... |my.vim-licence|
 ===============================================================================
-1. Intro                                             *vim-cmake-improved-intro*
+1. Intro                                                         *my.vim-intro*
 
 Overview of plugin
 
-2. Requirements                               *vim-cmake-improved-requirements*
+2. Requirements                                           *my.vim-requirements*
 
 What additional programs are required to run the plugin
 
-3. Usage                                             *vim-cmake-improved-usage*
+3. Usage                                                         *my.vim-usage*
 
 How to use the plugin. What functions does it give the user?
 
-4. Licence                                         *vim-cmake-improved-licence*
+4. Licence                                                     *my.vim-licence*
 
 This is open source make sure to include a licence
 

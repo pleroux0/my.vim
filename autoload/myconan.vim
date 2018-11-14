@@ -1,9 +1,9 @@
-function! mycmake#conan#clear_vars()
+function! myconan#clear_vars()
   unlet! t:conan_profile
   unlet! t:conan_generator
 endfunction
 
-function! mycmake#conan#get_arguments()
+function! myconan#get_arguments()
   let l:arguments = []
 
   if exists("t:conan_profile") == 1
@@ -17,55 +17,55 @@ function! mycmake#conan#get_arguments()
   return l:arguments
 endfunction
 
-function! mycmake#conan#is_conan_project()
+function! myconan#is_conan_project()
   if !exists("t:project_source_dir")
     return v:false
   endif
 
-  call mycmake#util#cd_push(t:project_source_dir)
+  let l:dir = myutil#cd(t:project_source_dir)
 
   let l:out = filereadable("conanfile.txt") || filereadable("conanfile.py")
 
-  call mycmake#util#cd_pop()
+  call myutil#cd(l:dir)
 
   return l:out
 endfunction
 
 function! s:conan_command(cmd)
   " Must be a conan project
-  if !mycmake#conan#is_conan_project()
+  if !myconan#is_conan_project()
     echo "Non-conan project cannot be built with conan build"
     return v:false
   endif
 
-  return mycmake#util#run_command_in(a:cmd, t:project_build_dir)
+  return myutil#run_command_in(a:cmd, t:project_build_dir)
 endfunction
 
-function! mycmake#conan#install()
+function! myconan#install()
   " Do nothing if project not set
-  if !mycmake#project#is_set()
+  if !myproject#is_set()
     return v:false
   endif
 
   call mkdir(t:project_build_dir, "p")
 
   let l:cmd = ["conan", "install"]
-  let l:cmd += [fnameescape(mycmake#util#abs_path(t:project_source_dir))]
-  let l:cmd += mycmake#conan#get_arguments()
+  let l:cmd += [fnameescape(myutil#abs_path(t:project_source_dir))]
+  let l:cmd += myconan#get_arguments()
 
   return s:conan_command(l:cmd)
 endfunction
 
-function! mycmake#conan#build()
+function! myconan#build()
   " Do nothing if project not set
-  if !mycmake#project#is_set()
+  if !myproject#is_set()
     return v:false
   endif
 
   call mkdir(t:project_build_dir, "p")
 
   let l:cmd = ["conan", "build"]
-  let l:cmd += [fnameescape(mycmake#util#abs_path(t:project_source_dir))]
+  let l:cmd += [fnameescape(myutil#abs_path(t:project_source_dir))]
 
   return s:conan_command(l:cmd)
 endfunction
