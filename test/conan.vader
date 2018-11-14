@@ -1,0 +1,107 @@
+" ClearConanVars
+" ------------------------------------------------------------------------------
+Execute (Clear conan variables):
+  let t:conan_profile="asdf"
+  let t:conan_generator="asdf"
+  ConanClearVars
+
+Then (Vars shouldn't exist):
+  Assert !exists("t:conan_profile")
+  Assert !exists("t:conan_generator")
+
+" get_arguments
+" ------------------------------------------------------------------------------
+Execute (conan arguments none):
+  ConanClearVars
+
+Then (arguments is empty):
+  Assert mycmake#conan#get_arguments() == []
+
+Execute (conan arguments profile):
+  ConanClearVars
+  let t:conan_profile = "my_profile"
+
+Then (arguments contains profile):
+  Assert mycmake#conan#get_arguments() == ["--profile", "my_profile"]
+
+Execute (conan arguments generator):
+  ConanClearVars
+  let t:conan_generator = "my_generator"
+
+Then (arguments contains generator):
+  Assert mycmake#conan#get_arguments() == ["--generator", "my_generator"]
+
+" conan project not set
+" ------------------------------------------------------------------------------
+Execute (conan project not set):
+  ProjectClearVars
+  ConanClearVars
+
+Then:
+  Assert !mycmake#conan#is_conan_project()
+  Assert !mycmake#conan#install()
+  Assert !mycmake#conan#build()
+
+" conan project empty
+" ------------------------------------------------------------------------------
+Execute (conan project empty):
+  ProjectClearVars
+  let t:project_source_dir="test/case/empty"
+
+Then (is not conan project):
+  Assert !mycmake#conan#is_conan_project()
+  Assert !mycmake#conan#install()
+  Assert !mycmake#conan#build()
+
+" is conan project
+" ------------------------------------------------------------------------------
+Execute (conan project txt):
+  ProjectClearVars
+  let t:project_source_dir="test/case/conanfile_txt"
+
+Then (is conan project):
+  Assert mycmake#conan#is_conan_project()
+
+Execute (conan project py):
+  ProjectClearVars
+  let t:project_source_dir="test/case/conanfile_py"
+
+Then (is conan project):
+  Assert mycmake#conan#is_conan_project()
+
+" bad conan project
+" ------------------------------------------------------------------------------
+Execute (conan project bad):
+  ProjectClearVars
+  let t:project_source_dir = "test/case/conanfile_py"
+  let t:project_build_dir = "build/conan_project_bad"
+
+Then:
+  Assert mycmake#conan#is_conan_project()
+  Assert !mycmake#conan#install()
+  Assert !mycmake#conan#build()
+
+" good conan project
+" ------------------------------------------------------------------------------
+Execute (conan project good):
+  ProjectClearVars
+  ConanClearVars
+  let t:project_source_dir = "test/case/conan"
+  let t:project_build_dir = "build/conan_project_good"
+
+Then:
+  Assert mycmake#conan#is_conan_project()
+  Assert mycmake#conan#install()
+  Assert filereadable("build/conan_project_good/conanbuildinfo.cmake")
+  Assert filereadable("build/conan_project_good/conanbuildinfo.txt")
+  Assert mycmake#conan#build()
+  Assert filereadable("build/conan_project_good/test_build")
+
+" Make sure that the directory changes back to root
+" ------------------------------------------------------------------------------
+After (Clean up):
+  call mycmake#util#cd_pop_all()
+
+Before (Clean up):
+  ProjectClearVars
+  ConanClearVars
