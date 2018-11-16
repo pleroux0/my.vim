@@ -46,3 +46,28 @@ function! myutil#filereadable(file, directory)
 
   return l:out
 endfunction
+
+function! myutil#reset_make()
+  let &makeprg = 'make'
+endfunction
+
+function! myutil#delete(file, directory)
+
+  let l:cwd = myutil#cd(t:directory)
+
+  if !filereadable(a:file)
+    echo "Skipping deletetion of file that doesn't exist: " . a:file
+    return v:true
+  endif
+
+  if !filewritable(a:file)
+    echo "Cannot delete file without write permissions: " . a:file
+    return v:false
+  endif
+
+  call delete("CMakeCache.txt")
+
+  myutil#cd(l:cwd)
+
+  return v:true
+endfunction

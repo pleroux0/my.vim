@@ -108,3 +108,24 @@ function! mycmake#configure()
 
   return myutil#run_command_in(l:cmd, t:project_build_dir)
 endfunction
+
+function! mycmake#set_make()
+  let &makeprg = 'cmake --build ' . fnameescape(t:project_build_dir) . ' --'
+endfunction
+
+function! mycmake#clean()
+  if !myproject#is_set()
+    return v:false
+  endif
+
+  " Must be CMake project
+  if !mycmake#is_cmake_project()
+    echo "Non-cmake project cannot be configured"
+    return v:false
+  endif
+
+  call myutil#delete("CMakeCache.txt", t:project_build_dir)
+  call myutil#delete("CTestTestfile.cmake", t:project_build_dir)
+
+  return v:true
+endfunction

@@ -1,7 +1,10 @@
 command! CMakeClearVars call mycmake#clear_vars()
 command! CMakeConfigure call mycmake#configure()
 
-" command! CMakeClean
+command! CMakeSetMake call mycmake#set_make()
+
+command! CMakeClean call mycmake#clean()
+
 " command! CMakeCD
 
 " command! CTest
@@ -10,4 +13,3 @@ command! CMakeConfigure call mycmake#configure()
 " command! CTestCoverage
 
 " command! CCMake
-
