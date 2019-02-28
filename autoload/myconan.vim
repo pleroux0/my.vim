@@ -31,9 +31,23 @@ function! myconan#is_conan_project()
   return l:out
 endfunction
 
+function! myconan#is_conan_workspace()
+  if !exists("t:project_source_dir")
+    return v:false
+  endif
+
+  let l:dir = myutil#cd(t:project_source_dir)
+
+  let l:out = filereadable("conanws.yml")
+
+  call myutil#cd(l:dir)
+
+  return l:out
+endfunction
+
 function! s:conan_command(cmd)
   " Must be a conan project
-  if !myconan#is_conan_project()
+  if !myconan#is_conan_project() && !myconan#is_conan_workspace()
     echo "Non-conan project cannot be built with conan build"
     return v:false
   endif
@@ -51,6 +65,7 @@ function! myconan#install()
 
   let l:cmd = ["conan", "install"]
   let l:cmd += [fnameescape(myutil#abs_path(t:project_source_dir))]
+  let l:cmd += ["-if " . fnameescape(myutil#abs_path(t:project_build_dir))]
   let l:cmd += myconan#get_arguments()
 
   return s:conan_command(l:cmd)

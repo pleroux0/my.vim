@@ -69,6 +69,15 @@ Execute (conan project py):
 Then (is conan project):
   Assert myconan#is_conan_project()
 
+" is conan workspace
+" ------------------------------------------------------------------------------
+Execute (conan workspace):
+  ProjectClearVars
+  let t:project_source_dir="test/case/conan_workspace"
+
+Then (is conan workspace):
+  Assert myconan#is_conan_workspace()
+
 " bad conan project
 " ------------------------------------------------------------------------------
 Execute (conan project bad):
