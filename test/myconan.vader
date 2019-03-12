@@ -3,11 +3,15 @@
 Execute (Clear conan variables):
   let t:conan_profile="asdf"
   let t:conan_generator="asdf"
+  let t:conan_build="asdf"
+  let t:conan_user_arguments="asdf"
   ConanClearVars
 
 Then (Vars shouldn't exist):
   Assert !exists("t:conan_profile")
   Assert !exists("t:conan_generator")
+  Assert !exists("t:conan_build")
+  Assert !exists("t:conan_user_arguments")
 
 " get_arguments
 " ------------------------------------------------------------------------------

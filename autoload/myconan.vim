@@ -1,6 +1,8 @@
 function! myconan#clear_vars()
   unlet! t:conan_profile
   unlet! t:conan_generator
+  unlet! t:conan_build
+  unlet! t:conan_user_arguments
 endfunction
 
 function! myconan#get_arguments()
@@ -12,6 +14,18 @@ function! myconan#get_arguments()
 
   if exists("t:conan_generator")
     let l:arguments += ["--generator", t:conan_generator]
+  endif
+
+  if exists("t:conan_build")
+    let l:arguments += ["--build", t:conan_build]
+  endif
+
+  if exists("t:conan_user_arguments")
+    if type(t:conan_user_arguments) == type([])
+      let arguments += t:conan_user_arguments
+    else
+      let arguments += [t:conan_user_arguments]
+    endif
   endif
 
   return l:arguments
